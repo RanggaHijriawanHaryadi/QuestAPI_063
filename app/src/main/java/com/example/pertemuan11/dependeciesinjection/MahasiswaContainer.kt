@@ -9,10 +9,10 @@ import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 
 interface AppContainer{
-    val kontakRepository: MahasiswaRepository
+    val mahasiswaRepository: MahasiswaRepository
 }
 class MahasiswaContainer: AppContainer {
-    private val baseUrl= "http://10.0.2.2:8000/umyTI/" //localhost diganti ip klo run dihp
+    private val baseUrl= "http://10.0.2.2:80/umyTI/" //localhost diganti ip klo run dihp
     private val json = Json { ignoreUnknownKeys = true }
     private val retrofit: Retrofit = Retrofit.Builder()
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
@@ -21,7 +21,7 @@ class MahasiswaContainer: AppContainer {
     private val mahasiswaServis: MahasiswaServis by lazy {
         retrofit.create(MahasiswaServis::class.java)
     }
-    override val kontakRepository: MahasiswaRepository by lazy {
+    override val mahasiswaRepository: MahasiswaRepository by lazy {
         NetworkMahasiswaRepository(mahasiswaServis)
     }
 }
