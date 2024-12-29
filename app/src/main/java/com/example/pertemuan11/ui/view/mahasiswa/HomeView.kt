@@ -21,11 +21,76 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.pertemuan11.model.Mahasiswa
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import com.example.pertemuan11.R
+
+
 
 
 object DestinasiHome : DestinasiNavigasi {
     override val route = "home"
     override val titleRes = "Home Mhs"
+}
+
+
+@Composable
+fun OnLoading(modifier: Modifier = Modifier) {
+    Image(
+        modifier = modifier.size(200.dp),
+        painter = painterResource(R.drawable.a),
+        contentDescription = stringResource(R.string.loading)
+    )
+}
+
+@Composable
+fun OnError(retryAction: () -> Unit, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.b), contentDescription = ""
+        )
+        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
+        Button(onClick = retryAction) {
+            Text(stringResource(R.string.retry))
+        }
+    }
+}
+
+@Composable
+fun MhsLayout(
+    mahasiswa: List<Mahasiswa>,
+    modifier: Modifier = Modifier,
+    onDetailClick: (Mahasiswa) -> Unit,
+    onDeleteClick: (Mahasiswa) -> Unit = {}
+) {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(mahasiswa) { mahasiswa ->
+            MhsCard(
+                mahasiswa = mahasiswa,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onDetailClick(mahasiswa) },
+                onDeleteClick = {
+                    onDeleteClick(mahasiswa)
+                }
+            )
+        }
+    }
 }
 
 @Composable
